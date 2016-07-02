@@ -12,9 +12,9 @@ requires = [
     'pyramid',
     'pyramid_chameleon',
     'pyramid_debugtoolbar',
-    'gunicorn',
     'pyramid_jinja2',
     'pymongo',
+    'gunicorn',
     ]
 
 tests_require = [

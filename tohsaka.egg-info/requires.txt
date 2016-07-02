@@ -1,7 +1,9 @@
 pyramid
 pyramid_chameleon
 pyramid_debugtoolbar
-waitress
+pyramid_jinja2
+pymongo
+gunicorn
 
 [testing]
 WebTest >= 1.3.1
