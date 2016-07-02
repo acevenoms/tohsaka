@@ -15,6 +15,7 @@ requires = [
     'pyramid_jinja2',
     'pymongo',
     'gunicorn',
+    'passlib',
     ]
 
 tests_require = [
