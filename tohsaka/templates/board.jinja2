@@ -1,11 +1,44 @@
 {% extends "templates/base.jinja2" %}
 {% block content %}
-<form action="/{{ board }}/" method="POST">
-    Name: <input type="text" name="author">
-    Password: <input type="text" name="password">
-    Comment: <input type="text" name="comment">
-    Image: <input type="file" name="file">
-    <input type="submit" value="Submit">
-</form>
-<p>Recent post: {{ postid }}</p>
+    <div class="postform-container" ng-init="init('{{ board }}', {{ page }}, {{ thread }})">
+        <form ng-submit="doPost()">
+            <table>
+                <tr>
+                    <td><span class="formlabel">Name</span></td>
+                    <td><input class="textinput" type="text" name="author" ng-bind="draft.author"></td>
+                </tr>
+                <tr>
+                    <td><span class="formlabel">Email</span></td>
+                    <td><input class="textinput" type="text" name="email" ng-bind="draft.email"></td>
+                </tr>
+                <tr>
+                    <td><span class="formlabel">Password</span></td>
+                    <td><input class="textinput" type="password" name="password" ng-bind="draft.password"></td>
+                </tr>
+                <tr>
+                    <td><span class="formlabel">Comment</span></td>
+                    <td><textarea class="textinput" name="comment" ng-bind="draft.comment"></textarea></td>
+                </tr>
+                <tr>
+                    <td><span class="formlabel">Image</span></td>
+                    <td>
+                        <label for="upload-input">
+                            <div id="custom-upload">{{ '{{ draft.file.filename || "Choose file..." }}' }}</div>
+                        </label>
+                        <input id="upload-input" type="file" name="img" ng-bind="draft.file">
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Submit"></td>
+                    <td><span class="formlabel">No shitposting pls</span></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="posts-container">
+        <div ng-repeat="post in posts" class="post">
+            <span class="post-head">Hello {{ '{{ post.author }}' }}</span>
+            <blockquote class="post-body">I am your pizza {{ '{{ post.comment }}' }}</blockquote>
+        </div>
+    </div>
 {% endblock %}

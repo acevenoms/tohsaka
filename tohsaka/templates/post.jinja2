@@ -1,0 +1,7 @@
+{% extends "templates/base.jinja2" %}
+{% block additional_head %}
+    <meta http-equiv="refresh" content="3;{{ redirect }}" />
+{% endblock %}
+{% block content %}
+    <h1>{{ project }}</h1>
+{% endblock %}

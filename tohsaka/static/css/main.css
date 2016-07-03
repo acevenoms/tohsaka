@@ -1,0 +1,39 @@
+body {
+    background: #303030;
+}
+
+.postform-container {
+    border-bottom: solid #505050 1px;
+}
+
+.postform-container form {
+    display: inline;
+    width: 600px;
+    margin: auto;
+}
+
+.postform-container .textinput {
+    width: 100%;
+    background: #303030;
+    border: solid #505050 1px;
+
+}
+
+.postform-container .formlabel {
+    font-family: sans-serif;
+    font-size: 0.8em;
+    color: #909090;
+}
+
+.postform-container #upload-input {
+    display: none;
+}
+
+.postform-container #custom-upload {
+    font-family: sans-serif;
+    font-size: 0.8em;
+    color: #909090;
+    border: solid #505050 1px;
+    width: 100%;
+    cursor: pointer;
+}
