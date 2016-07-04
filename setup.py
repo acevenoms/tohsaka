@@ -16,6 +16,7 @@ requires = [
     'pymongo',
     'gunicorn',
     'passlib',
+    'wand'
     ]
 
 tests_require = [

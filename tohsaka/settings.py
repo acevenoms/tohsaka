@@ -5,3 +5,6 @@ IMG_PATH = 'tohsaka/static/img/'
 THUMB_PATH = 'tohsaka/static/thumbs/'
 THREADS_PER_PAGE = 10
 PREVIEW_REPLIES = 3
+REPLY_LIMIT = 300
+THUMB_SIZE = 250
+THUMB_EXTENSION = 's.png'

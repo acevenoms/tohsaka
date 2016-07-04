@@ -1,5 +1,8 @@
 body {
     background: #303030;
+    color: #909090;
+    font-size: 10pt;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .postform-container {
@@ -7,21 +10,23 @@ body {
 }
 
 .postform-container form {
-    display: inline;
-    width: 600px;
+    width: 300px;
     margin: auto;
+}
+
+.postform-container table {
+    width: 100%;
 }
 
 .postform-container .textinput {
     width: 100%;
     background: #303030;
     border: solid #505050 1px;
-
+    box-sizing: border-box;
 }
 
 .postform-container .formlabel {
     font-family: sans-serif;
-    font-size: 0.8em;
     color: #909090;
 }
 
@@ -30,10 +35,99 @@ body {
 }
 
 .postform-container #custom-upload {
-    font-family: sans-serif;
-    font-size: 0.8em;
     color: #909090;
     border: solid #505050 1px;
     width: 100%;
     cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+    color: #a0d3ff
+}
+
+hr {
+    clear: both;
+    border: none;
+}
+
+.thread {
+    border-bottom: 1px #505050 solid;
+    margin-bottom: 8px;
+}
+
+.op-container {
+    display: inline;
+}
+
+.post {
+    margin: 4px 0px;
+    overflow: hidden;
+}
+
+.op {
+    display: inline;
+}
+
+.ext-button {
+    cursor: pointer;
+    margin-bottom: -4px;
+    width: 18px;
+    height: 18px;
+}
+
+.thread-hide-button {
+    float: left;
+    margin-right: 5px;
+    margin-top: -1px;
+}
+
+.file {
+    display: block;
+}
+
+.thumbnail {
+    float: left;
+    margin: 3px 20px 5px;
+}
+
+.post-head {
+    width: auto;
+    display: inline;
+}
+
+.name-block {
+    display: inline-block;
+}
+
+.name {
+    color: cornflowerblue;
+    font-weight: bold;
+}
+
+.post-body {
+    display: block;
+}
+
+.summary {
+    margin-top: 10px;
+}
+
+.expand-thread {
+    margin-right: 3px;
+    margin-left: 2px;
+}
+
+.arrows {
+    float: left;
+    margin-right: 2px;
+    margin-top: 0px;
+    margin-left: 2px;
+}
+
+.reply {
+    background: #505050;
+    border-bottom: 1px solid #202020;
+    display: table;
+    padding: 2px;
 }

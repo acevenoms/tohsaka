@@ -4,6 +4,7 @@ pyramid_debugtoolbar
 pyramid_jinja2
 pymongo
 gunicorn
+wand
 
 [testing]
 WebTest >= 1.3.1

@@ -29,18 +29,18 @@ def board_view(request):
     return {'page_title': title, 'board': board, 'page': 1, 'thread': 'null'}
 
 
-@view_config(route_name='newpost', renderer='templates/post.jinja2')
+@view_config(route_name='newpost', renderer='json')
 def new_post(request):
-    board = request.matchdict['board']
-    fileinfo = model.upload_file(request.POST['img'])
-    postid = model.post(board,
+    fileinfo = model.upload_file(request.POST['file'])
+    postid = model.post(0,
+                        request.matchdict['board'],
                         request.POST['author'],
-                        None,
+                        request.POST['email'],
+                        sha256_crypt.encrypt(request.POST['password']),
                         request.POST['comment'],
                         fileinfo,
-                        sha256_crypt.encrypt(request.POST['password']))
-    title = 'Board :: ' + board
-    return {'page_title': title, 'redirect': '/'+board+'/', 'project': 'Post successful! post:'+postid}
+                        False)
+    return postid
 
 
 @view_config(route_name='thread', renderer='templates/index.jinja2')

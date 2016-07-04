@@ -5,27 +5,27 @@
             <table>
                 <tr>
                     <td><span class="formlabel">Name</span></td>
-                    <td><input class="textinput" type="text" name="author" ng-bind="draft.author"></td>
+                    <td><input class="textinput" type="text" name="author" ng-model="draft.author"></td>
                 </tr>
                 <tr>
                     <td><span class="formlabel">Email</span></td>
-                    <td><input class="textinput" type="text" name="email" ng-bind="draft.email"></td>
+                    <td><input class="textinput" type="text" name="email" ng-model="draft.email"></td>
                 </tr>
                 <tr>
                     <td><span class="formlabel">Password</span></td>
-                    <td><input class="textinput" type="password" name="password" ng-bind="draft.password"></td>
+                    <td><input class="textinput" type="password" name="password" ng-model="draft.password"></td>
                 </tr>
                 <tr>
                     <td><span class="formlabel">Comment</span></td>
-                    <td><textarea class="textinput" name="comment" ng-bind="draft.comment"></textarea></td>
+                    <td><textarea class="textinput" name="comment" ng-model="draft.comment"></textarea></td>
                 </tr>
                 <tr>
                     <td><span class="formlabel">Image</span></td>
                     <td>
                         <label for="upload-input">
-                            <div id="custom-upload">{{ '{{ draft.file.filename || "Choose file..." }}' }}</div>
+                            <div id="custom-upload" ng-bind="draft.file.name"></div>
                         </label>
-                        <input id="upload-input" type="file" name="img" ng-bind="draft.file">
+                        <input id="upload-input" type="file" name="img" onchange="angular.element(this).scope().setFiles(this.files)">
                     </td>
                 </tr>
                 <tr>
@@ -35,10 +35,75 @@
             </table>
         </form>
     </div>
-    <div class="posts-container">
-        <div ng-repeat="post in posts" class="post">
-            <span class="post-head">Hello {{ '{{ post.author }}' }}</span>
-            <blockquote class="post-body">I am your pizza {{ '{{ post.comment }}' }}</blockquote>
+    <div class="thread" ng-repeat="thread in posts.threads" id="t{{ '{{ thread._id }}' }}">
+        <div class="post-container op-container" id="p{{ '{{ thread._id }}' }}">
+            <div class="post op">
+                <span>
+                    <img alt="H" class="ext-button thread-hide-button"
+                         src="/static/site-img/minus.png"
+                         title="Hide thread">
+                </span>
+                <div class="file">
+                    <div class="file-desc">
+                        File:
+                        <a ng-href="/static/img/{{ '{{ thread.image }}' }}">{{ '{{ thread.original }}' }}</a>
+                        ({{ '{{ formatFileInfo(thread.info) }}' }})
+                    </div>
+                    <a class="thumbnail" target="_blank">
+                        <img ng-src="/static/img/{{ '{{ thread.thumbnail }}' }}">
+                    </a>
+                </div>
+                <div class="post-head">
+                    <input name="{{ '{{ thread._id }}' }}" value="delete" type="checkbox">
+                    <span class="subject"></span>
+                    <span class="name-block">
+                        <span class="name">{{ '{{ thread.author }}' }}</span>
+                    </span>
+                    <span class="timestamp">{{ '{{ translateTimestamp(thread.timestamp) }}' }}</span>
+                    <span class="post-id">
+                        ID: <span class="post-id-num">{{ '{{ thread._id }}' }}</span>&nbsp;
+                        <span class="post-id-reply">
+                            <a ng-href="/{{ '{{ thread.board }}' }}/{{ '{{ thread._id }}' }}/">[Reply]</a>
+                        </span>
+                    </span>
+                </div>
+                <blockquote class="post-body">{{ '{{ thread.comment }}' }}</blockquote>
+            </div>
+            <span class="summary">
+                <img alt="+" class="ext-button expand-thread" title="Expand thread" src="/static/site-img/plus.png">
+                X replies and Y images omitted.
+                <a ng-href="/{{ '{{ thread.board }}' }}/{{ '{{ thread._id }}' }}/">View thread.</a>
+            </span>
+            <div ng-repeat="reply in posts.replies[thread._id]" class="post-container reply-container">
+                <div class="arrows">&gt;&gt;</div>
+                <div class="post reply">
+                    <div id="{{ '{{ reply._id }}' }}" class="post-head">
+                        <input name="{{ '{{ reply._id }}' }}" value="delete" type="checkbox">
+                        <span class="name-block">
+                            <span class="name">{{ '{{ reply.author }}' }}</span>
+                        </span>
+                        <span class="timestamp">{{ '{{ translateTimestamp(reply.timestamp) }}' }}</span>
+                        <span class="post-id">
+                            ID: <span class="post-id-num">{{ '{{ reply._id }}' }}</span>&nbsp;
+                            <span class="post-id-reply">
+                                <a ng-href="/{{ '{{ reply.board }}' }}/{{ '{{ reply._id }}' }}/">[Reply]</a>
+                            </span>
+                        </span>
+                    </div>
+                    <div class="file">
+                        <div class="file-desc">
+                            File:
+                            <a ng-href="/static/img/{{ '{{ reply.image }}' }}">{{ '{{ reply.original }}' }}</a>
+                            ({{ '{{ formatFileInfo(reply.info) }}' }})
+                        </div>
+                        <a class="thumbnail" target="_blank">
+                            <img ng-src="/static/img/{{ '{{ reply.thumbnail }}' }}">
+                        </a>
+                    </div>
+                    <blockquote class="post-body">{{ '{{ reply.comment }}' }}</blockquote>
+                </div>
+            </div>
         </div>
+        <hr />
     </div>
 {% endblock %}
