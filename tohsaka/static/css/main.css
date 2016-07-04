@@ -84,11 +84,19 @@ hr {
 
 .file {
     display: block;
+    position: relative;
 }
 
 .thumbnail {
     float: left;
     margin: 3px 20px 5px;
+}
+
+.hover-preview {
+    position: absolute;
+    left: 280px;
+    top: -20px;
+    z-index: 200;
 }
 
 .post-head {

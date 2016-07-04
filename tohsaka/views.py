@@ -22,15 +22,22 @@ def api_board(request):
     return model.get_threads(board, page)
 
 
+@view_config(route_name='api_thread', renderer='json')
+def api_thread(request):
+    board = request.matchdict['board']
+    thread = request.matchdict['thread']
+    return model.get_single_thread(board, thread)
+
+
 @view_config(route_name='board', renderer='templates/board.jinja2')
 def board_view(request):
     board = request.matchdict['board']
     title = 'Board :: ' + board
-    return {'page_title': title, 'board': board, 'page': 1, 'thread': 'null'}
+    return {'page_title': title, 'controller': 'BoardController', 'board': board, 'posts_source': 1}
 
 
-@view_config(route_name='newpost', renderer='json')
-def new_post(request):
+@view_config(route_name='new_thread', renderer='json')
+def new_thread(request):
     fileinfo = model.upload_file(request.POST['file'])
     postid = model.post(0,
                         request.matchdict['board'],
@@ -43,13 +50,23 @@ def new_post(request):
     return postid
 
 
-@view_config(route_name='thread', renderer='templates/index.jinja2')
+@view_config(route_name='thread', renderer='templates/board.jinja2')
 def thread_view(request):
-    title = 'Thread :: ' + request.matchdict['thread']
-    return {'page_title': title, 'project': 'thread'}
+    board = request.matchdict['board']
+    thread = request.matchdict['thread']
+    title = 'Thread :: ' + thread
+    return {'page_title': title, 'controller': 'ThreadController', 'board': board, 'posts_source': thread}
 
 
-@view_config(route_name='reply', renderer='templates/index.jinja2')
+@view_config(route_name='reply', renderer='json')
 def reply(request):
-    title = 'Thread :: ' + request.matchdict['thread']
-    return {'page_title': title, 'project': 'thread'}
+    fileinfo = model.upload_file(request.POST['file'])
+    postid = model.post(request.matchdict['thread'],
+                        request.matchdict['board'],
+                        request.POST['author'],
+                        request.POST['email'],
+                        sha256_crypt.encrypt(request.POST['password']),
+                        request.POST['comment'],
+                        fileinfo,
+                        False)
+    return postid

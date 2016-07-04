@@ -39,6 +39,7 @@ def post(resto, board, author, email, passhash, comment, image, sticky):
     if resto != 0:
         try:
             threadId = ObjectId(resto)
+            postObject['resto'] = threadId
         except:
             return {'code': 1, 'message': 'Invalid thread ID: ' + str(resto)}
         if email != 'sage': # sage goes only in the email field
@@ -50,14 +51,18 @@ def post(resto, board, author, email, passhash, comment, image, sticky):
                 })
                 if result.matched_count < 1:
                     return {'code': 2, 'message': 'Thread does not exist'}
+                # Don't forget to ACTUALLY INSERT THE POST YA DINGUS
+                result = db.posts.insert_one(postObject)
+                if result.acknowledged is False:
+                    return {'code': 3, 'message': 'Failed to reply'}
+                result = threadId
     else:
         if image is None:
-            return {'code': 3, 'message': 'You must post an image to start a thread'}
+            return {'code': 4, 'message': 'You must post an image to start a thread'}
+        else:
+            result = db.posts.insert_one(postObject).inserted_id
 
-    # all the tests have been passed, insert!
-    result = db.posts.insert_one(postObject)
-
-    return {'code': 0, 'board': board, 'thread': str(result.inserted_id)}
+    return {'code': 0, 'board': board, 'thread': str(result)}
 
 
 def get_threads(board, page):
@@ -73,6 +78,19 @@ def get_threads(board, page):
                                     }).sort('_id', pymongo.DESCENDING).limit(settings.PREVIEW_REPLIES)]
     return {'threads': threads, 'replies': replies}
 
+
+def get_single_thread(board, thread):
+    cursor = db.posts.find({
+        '_id': ObjectId(thread),
+        'board': board
+    }).limit(1)
+    threads = [{**thread, 'timestamp': thread['_id'].generation_time} for thread in cursor]
+    replies = {}
+    for thread in threads:
+        replies[str(thread['_id'])] = [{**reply, 'timestamp': reply['_id'].generation_time} for reply in db.posts.find({
+            'resto': thread['_id']
+        }).sort('_id', pymongo.ASCENDING)]
+    return {'threads': threads, 'replies': replies}
 
 def upload_file(file):
     try:

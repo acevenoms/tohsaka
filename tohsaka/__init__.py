@@ -18,7 +18,7 @@ def main(global_config, **settings):
     config.add_route('api_board', '/api/{board}/', request_method='GET')
     config.add_route('api_thread', '/api/{board}/{thread}/', request_method='GET')
     config.add_route('board', '/{board}/', request_method='GET')
-    config.add_route('newpost', '/{board}/', request_method='POST')
+    config.add_route('new_thread', '/{board}/', request_method='POST')
     config.add_route('thread', '/{board}/{thread}/', request_method='GET')
     config.add_route('reply', '/{board}/{thread}/', request_method='POST')
     config.scan()

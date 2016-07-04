@@ -1,6 +1,6 @@
 {% extends "templates/base.jinja2" %}
 {% block content %}
-    <div class="postform-container" ng-init="init('{{ board }}', {{ page }}, {{ thread }})">
+    <div class="postform-container" ng-init="init('{{ board }}', '{{ posts_source }}')">
         <form ng-submit="doPost()">
             <table>
                 <tr>
@@ -38,7 +38,7 @@
     <div class="thread" ng-repeat="thread in posts.threads" id="t{{ '{{ thread._id }}' }}">
         <div class="post-container op-container" id="p{{ '{{ thread._id }}' }}">
             <div class="post op">
-                <span>
+                <span ng-if="showHideExpand">
                     <img alt="H" class="ext-button thread-hide-button"
                          src="/static/site-img/minus.png"
                          title="Hide thread">
@@ -47,11 +47,18 @@
                     <div class="file-desc">
                         File:
                         <a ng-href="/static/img/{{ '{{ thread.image }}' }}">{{ '{{ thread.original }}' }}</a>
-                        ({{ '{{ formatFileInfo(thread.info) }}' }})
+                        ({{ '{{ util.formatFileInfo(thread.info) }}' }})
                     </div>
-                    <a class="thumbnail" target="_blank">
+                    <a class="thumbnail" target="_blank" ng-if="!thread.expandImage" ng-click="thread.expandImage = true"
+                       ng-mouseenter="thread.hoverPreview = true" ng-mouseleave="thread.hoverPreview = false">
                         <img ng-src="/static/img/{{ '{{ thread.thumbnail }}' }}">
                     </a>
+                    <a class="thumbnail" target="_blank" ng-if="thread.expandImage" ng-click="thread.expandImage = false">
+                        <img ng-src="/static/img/{{ '{{ thread.image }}' }}">
+                    </a>
+                    <!-- span class="hover-preview" ng-if="thread.hoverPreview && !thread.expandImage">
+                        <img ng-src="/static/img/{{ '{{ thread.image }}' }}">
+                    </span -->
                 </div>
                 <div class="post-head">
                     <input name="{{ '{{ thread._id }}' }}" value="delete" type="checkbox">
@@ -59,7 +66,7 @@
                     <span class="name-block">
                         <span class="name">{{ '{{ thread.author }}' }}</span>
                     </span>
-                    <span class="timestamp">{{ '{{ translateTimestamp(thread.timestamp) }}' }}</span>
+                    <span class="timestamp">{{ '{{ util.translateTimestamp(thread.timestamp) }}' }}</span>
                     <span class="post-id">
                         ID: <span class="post-id-num">{{ '{{ thread._id }}' }}</span>&nbsp;
                         <span class="post-id-reply">
@@ -69,7 +76,7 @@
                 </div>
                 <blockquote class="post-body">{{ '{{ thread.comment }}' }}</blockquote>
             </div>
-            <span class="summary">
+            <span class="summary" ng-if="showHideExpand">
                 <img alt="+" class="ext-button expand-thread" title="Expand thread" src="/static/site-img/plus.png">
                 X replies and Y images omitted.
                 <a ng-href="/{{ '{{ thread.board }}' }}/{{ '{{ thread._id }}' }}/">View thread.</a>
@@ -82,7 +89,7 @@
                         <span class="name-block">
                             <span class="name">{{ '{{ reply.author }}' }}</span>
                         </span>
-                        <span class="timestamp">{{ '{{ translateTimestamp(reply.timestamp) }}' }}</span>
+                        <span class="timestamp">{{ '{{ util.translateTimestamp(reply.timestamp) }}' }}</span>
                         <span class="post-id">
                             ID: <span class="post-id-num">{{ '{{ reply._id }}' }}</span>&nbsp;
                             <span class="post-id-reply">
@@ -90,15 +97,22 @@
                             </span>
                         </span>
                     </div>
-                    <div class="file">
+                    <div class="file" ng-if="reply.image">
                         <div class="file-desc">
                             File:
                             <a ng-href="/static/img/{{ '{{ reply.image }}' }}">{{ '{{ reply.original }}' }}</a>
-                            ({{ '{{ formatFileInfo(reply.info) }}' }})
+                            ({{ '{{ util.formatFileInfo(reply.info) }}' }})
                         </div>
-                        <a class="thumbnail" target="_blank">
+                        <a class="thumbnail" target="_blank" ng-if="!reply.expandImage" ng-click="reply.expandImage = true"
+                           ng-mouseenter="reply.hoverPreview = true" ng-mouseleave="reply.hoverPreview = false">
                             <img ng-src="/static/img/{{ '{{ reply.thumbnail }}' }}">
                         </a>
+                        <a class="thumbnail" target="_blank" ng-if="reply.expandImage" ng-click="reply.expandImage = false">
+                            <img ng-src="/static/img/{{ '{{ reply.image }}' }}">
+                        </a>
+                        <!-- span class="hover-preview" ng-if="reply.hoverPreview && !reply.expandImage">
+                            <img ng-src="/static/img/{{ '{{ reply.image }}' }}">
+                        </span -->
                     </div>
                     <blockquote class="post-body">{{ '{{ reply.comment }}' }}</blockquote>
                 </div>
