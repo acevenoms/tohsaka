@@ -33,7 +33,15 @@ def api_thread(request):
 def board_view(request):
     board = request.matchdict['board']
     title = 'Board :: ' + board
-    return {'page_title': title, 'controller': 'BoardController', 'board': board, 'posts_source': 1}
+    page = 1
+    if 'page' in request.params:
+        page = request.params['page']
+    return {'page_title': title,
+            'controller': 'BoardController',
+            'board': board,
+            'posts_source': int(page),
+            'boards': model.get_boards(),
+            'pages': model.get_pages(board)}
 
 
 @view_config(route_name='new_thread', renderer='json')
@@ -55,7 +63,12 @@ def thread_view(request):
     board = request.matchdict['board']
     thread = request.matchdict['thread']
     title = 'Thread :: ' + thread
-    return {'page_title': title, 'controller': 'ThreadController', 'board': board, 'posts_source': thread}
+    return {'page_title': title,
+            'controller': 'ThreadController',
+            'board': board,
+            'posts_source': thread,
+            'boards': model.get_boards(),
+            'pages': model.get_pages(board)}
 
 
 @view_config(route_name='reply', renderer='json')

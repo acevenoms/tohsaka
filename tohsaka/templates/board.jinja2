@@ -1,5 +1,12 @@
 {% extends "templates/base.jinja2" %}
-{% block content %}
+{% block content -%}
+    <div  class="nav boards">
+        <span>
+        {%- for boardlink in boards -%}
+            [ <a href="/{{ boardlink }}/">{{ boardlink }}</a>{%- if not loop.last -%}/{%- endif %} ]
+        {%- endfor -%}
+        </span>
+    </div>
     <div class="postform-container" ng-init="init('{{ board }}', '{{ posts_source }}')">
         <form ng-submit="doPost()">
             <table>
@@ -119,5 +126,26 @@
             </div>
         </div>
         <hr />
+    </div>
+    <div class="nav">
+        <span class="pages">
+        Pages:
+        {%- for pagelink in pages -%}
+            {%- if not pagelink == posts_source -%}
+            [<a href="/{{ board }}/?page={{ pagelink }}">
+                {{ pagelink }}
+            </a>]
+            {%- else -%}
+                [{{ pagelink }}]
+            {%- endif -%}
+        {%- endfor -%}
+        </span>
+    </div>
+    <div class="nav">
+        <span class="boards">
+        {%- for boardlink in boards -%}
+            [ <a href="/{{ boardlink }}/">{{ boardlink }}</a>{%- if not loop.last -%}/{%- endif %} ]
+        {%- endfor -%}
+        </span>
     </div>
 {% endblock %}

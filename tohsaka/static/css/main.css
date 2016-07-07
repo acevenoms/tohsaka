@@ -6,7 +6,13 @@ body {
 }
 
 .postform-container {
-    border-bottom: solid #505050 1px;
+    background: #303030;
+    border: solid #505050 1px;
+    padding: 5px;
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    z-index: 300;
 }
 
 .postform-container form {
@@ -25,6 +31,10 @@ body {
     box-sizing: border-box;
 }
 
+.postform-container textarea.textinput {
+    height: 160px;
+}
+
 .postform-container .formlabel {
     font-family: sans-serif;
     color: #909090;
@@ -39,6 +49,17 @@ body {
     border: solid #505050 1px;
     width: 100%;
     cursor: pointer;
+}
+
+.nav {
+    margin-top: 2px;
+    margin-bottom: 6px;
+}
+
+.pages {
+    padding: 10px;
+    background: #505050;
+    display: inline-block;
 }
 
 a {

@@ -168,7 +168,7 @@ angular.module("tohsaka", ["ngRoute"])
             // Clear out the file if it's just a placeholder
             $scope.draft.file = null;
         }
-        PostsService.Post($scope.currentBoard, 0, $scope.draft).then(postComplete);
+        PostsService.Post($scope.currentBoard, null, $scope.draft).then(postComplete);
     };
 
     $scope.util = UtilService;
@@ -178,9 +178,9 @@ angular.module("tohsaka", ["ngRoute"])
     }
 
     function postComplete(result) {
-        $scope.currentBoard = result.board;
-        $scope.currentThread = result.thread;
-        $scope.loadThread(null, null);
+        $scope.currentBoard = result.data.board;
+        $scope.currentThread = result.data.thread;
+        $scope.loadBoard(null, null);
         $scope.draft = {
             author: "",
             email: "",

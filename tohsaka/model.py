@@ -7,6 +7,7 @@ from datetime import timezone
 from wand.image import Image
 import time
 import os
+import math
 
 from tohsaka import settings
 
@@ -91,6 +92,15 @@ def get_single_thread(board, thread):
             'resto': thread['_id']
         }).sort('_id', pymongo.ASCENDING)]
     return {'threads': threads, 'replies': replies}
+
+def get_boards():
+    boards = db.posts.distinct('board')
+    return boards
+
+def get_pages(board):
+    numPosts = db.posts.count({'board': board})
+    numPages = math.ceil(numPosts/settings.THREADS_PER_PAGE)
+    return range(1, numPages)
 
 def upload_file(file):
     try:
