@@ -75,8 +75,9 @@ def get_threads(board, page):
     replies = {}
     for thread in threads:
         replies[str(thread['_id'])] = [{**reply, 'timestamp': reply['_id'].generation_time} for reply in db.posts.find({
-                                    'resto': thread['_id']
-                                    }).sort('_id', pymongo.DESCENDING).limit(settings.PREVIEW_REPLIES)]
+                                    'resto': thread['_id']}).sort('_id', pymongo.DESCENDING)
+                                    .limit(settings.PREVIEW_REPLIES)]
+        replies[str(thread['_id'])].reverse()
     return {'threads': threads, 'replies': replies}
 
 
