@@ -8,6 +8,7 @@ from wand.image import Image
 import time
 import os
 import math
+from hashlib import md5
 
 from tohsaka import settings
 
@@ -99,9 +100,9 @@ def get_boards():
     return boards
 
 def get_pages(board):
-    numPosts = db.posts.count({'board': board})
+    numPosts = db.posts.count({'board': board, 'resto': 0})
     numPages = math.ceil(numPosts/settings.THREADS_PER_PAGE)
-    return range(1, numPages)
+    return range(1, numPages+1)
 
 def upload_file(file):
     try:
@@ -114,17 +115,25 @@ def upload_file(file):
     finalthumbpath = settings.IMG_PATH+timestamp+settings.THUMB_EXTENSION
     os.makedirs(os.path.dirname(finalfilepath), exist_ok=True)
     image = Image(blob=file.file.read())
+    file.file.seek(0)
+    imgHash = md5(file.file.read()).hexdigest()
     fileinfo = {
         'bytes': file.bytes_read,
-        'width': image.width,
-        'height': image.height
+        'hash': imgHash
     }
+    if image.format == 'GIF':
+        fileinfo['width'] = image.page_width
+        fileinfo['height'] = image.page_height
+    else:
+        fileinfo['width'] = image.width
+        fileinfo['height'] = image.height
     image.save(filename=finalfilepath)
-    thumbSize = calculateThumbDimensions(image.width, image.height)
+    thumbSize = calculateThumbDimensions(fileinfo['width'], fileinfo['height'])
     if len(image.sequence) > 1:
         image = Image(image.sequence[0])
         image = image.convert('png')
-    image.resize(thumbSize[0], thumbSize[1], 'box')
+    if thumbSize != 0:
+        image.resize(thumbSize[0], thumbSize[1], 'box')
     image.save(filename=finalthumbpath)
     # fout = open(finalfilepath, 'wb')
     # fout.write(file.file.read())
@@ -135,6 +144,8 @@ def upload_file(file):
 
 def calculateThumbDimensions(width,height):
     largerDim = width if width > height else height
+    if largerDim <= settings.THUMB_SIZE:
+        return 0
     ratio = settings.THUMB_SIZE / largerDim
     return round(width*ratio), round(height*ratio)
 

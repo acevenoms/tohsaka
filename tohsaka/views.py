@@ -1,6 +1,7 @@
 from pyramid.view import view_config, notfound_view_config
 from pyramid.httpexceptions import HTTPNotFound
 from passlib.hash import sha256_crypt
+from hashlib import md5
 
 from tohsaka import model
 
@@ -51,7 +52,7 @@ def new_thread(request):
                         request.matchdict['board'],
                         request.POST['author'],
                         request.POST['email'],
-                        sha256_crypt.encrypt(request.POST['password']),
+                        md5(request.POST['password'].encode()).hexdigest(),
                         request.POST['comment'],
                         fileinfo,
                         False)
@@ -78,7 +79,7 @@ def reply(request):
                         request.matchdict['board'],
                         request.POST['author'],
                         request.POST['email'],
-                        sha256_crypt.encrypt(request.POST['password']),
+                        md5(request.POST['password'].encode()).hexdigest(),
                         request.POST['comment'],
                         fileinfo,
                         False)

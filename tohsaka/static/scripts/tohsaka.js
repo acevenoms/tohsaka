@@ -111,11 +111,17 @@ angular.module("tohsaka", ["ngRoute"])
         for (var t = 0; t < posts.threads.length; ++t) {
             posts.threads[t].expandImage = false;
             posts.threads[t].hoverPreview = false;
+            if(posts.threads[t].author == '') {
+                posts.threads[t].author = 'Anonymous'
+            }
         }
         for (var thread in posts.replies) {
             for(var r = 0; r < posts.replies[thread].length; ++r) {
                 posts.replies[thread][r].expandImage = false;
                 posts.replies[thread][r].hoverPreview = false;
+                if(posts.replies[thread][r].author == '') {
+                    posts.replies[thread][r].author = 'Anonymous'
+                }
             }
         }
         return posts;
